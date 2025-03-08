@@ -1,0 +1,14 @@
+.header_btn, .header_h2{
+    font-family: Exo\ 2,Helvetica Neue,Arial,sans-serif;
+    font-weight: 600;
+    font-size: .8125rem;
+    line-height: 1.5;
+}
+.breadcrumb{
+    font-size: .8125rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    font-family: Exo\ 2,Helvetica Neue,Arial,sans-serif;
+    letter-spacing: 2px;
+    color: rgba(39,44,51,.5) !important;
+}
