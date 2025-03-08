@@ -48,8 +48,7 @@ const http = axios.create({
 http.interceptors.request.use((config) => {
   const { intercept = true } = config;
   if (!intercept) return config;
-  const token = JSON.parse(localStorage.getItem("og-auth-session"))?.state;
-  console.log(token)
+  const token = JSON.parse(localStorage.getItem("og-auth-session"))?.state.userData?.token;
   if (token) config.headers.authorization = `Bearer ${token}`;
   return config;
 });

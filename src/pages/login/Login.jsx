@@ -31,10 +31,9 @@ const Login = () => {
         const errMsg = error?.response?.data?.message || error?.message;
         errorToast(errMsg);
       },
-      onSuccess: (response) => {
-        const resData = response?.data;
-        console.log(resData)
-        setCurrentUser(resData);
+      onSuccess: ({data}) => {
+        const res={...data.data,isAdmin:data.isAdmin,isPrinter:data.isPrinter};
+        setCurrentUser(res);
         navigate("/");
       },
     });

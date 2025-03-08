@@ -1,6 +1,5 @@
 import { Avatar, Button, ConfigProvider } from "antd";
 import { useNavigate } from "react-router-dom";
-import logo from "../../../assets/images/ncaa_logo.png";
 // import DropdownNotification from "../../../layout/components/DropdownNotification.jsx";
 import useCurrentUser from "../../../hooks/useCurrentUser.js";
 
@@ -15,14 +14,14 @@ const SidebarHeader = () => {
         <div className="flex gap-x-4 items-center">
           <div className="flex items-center gap-x-1">
             <img
-              src={logo}
+              src={'/logo2.jpeg'}
               alt="logo"
               width={40}
               className="cursor-pointer"
               onClick={() => navigate("/")}
             />
             <span className="font-bold leading-3 text-lg hidden sm:block text-[#2c3679]">
-              STORE
+              Admin
             </span>
           </div>
           <div className="relative hidden md:block">
@@ -90,13 +89,12 @@ const SidebarHeader = () => {
                   color: "#fff",
                 }}
               >
-                {userData?.data?.FIRST_NAME?.trim()[0]}
-                {userData?.data?.LAST_NAME?.trim()[0]}
+                A
               </Avatar>
             </div>
-            <span>
+            {/* <span>
               {userData?.data?.FIRST_NAME} {userData?.data?.LAST_NAME}
-            </span>
+            </span> */}
           </div>
           {/* <DropdownNotification /> */}
         </div>

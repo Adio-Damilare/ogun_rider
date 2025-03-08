@@ -11,13 +11,12 @@ const MainLayout = () => {
   const { userData } = useCurrentUser();
   const navigate = useNavigate();
 
-  useEffect(()=>{
-
-    if(!userData){
-      navigate("/login")
+  useEffect(() => {
+    if (!userData) {
+      navigate("/login");
     }
-  }, [userData, navigate])
-  
+  }, [userData, navigate]);
+
   const handleOpenNav = (param) => {
     setNavIsOpen(param);
   };
