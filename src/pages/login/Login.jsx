@@ -33,6 +33,7 @@ const Login = () => {
       },
       onSuccess: (response) => {
         const resData = response?.data;
+        console.log(resData)
         setCurrentUser(resData);
         navigate("/");
       },
