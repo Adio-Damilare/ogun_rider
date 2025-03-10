@@ -2,59 +2,63 @@ import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import Select from "react-select";
 import { Button } from "antd";
-import { useGetCountry, useGetState } from "@/services/API";
+import { useGetDistrict, useGetDistrictLGA } from "@/services/API";
 import useRiderState from "@/hooks/newRider";
 import AnimationWrapper from "@/component/core/Rider/AnimationWrapper.jsx";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 
-const Nationality = ({ onNext, onPrev, onClose } = {}) => {
+const Work = ({ onNext, onPrev, onClose } = {}) => {
   const updateData = useRiderState((state) => state.updateData);
   const previousData = useRiderState((state) => state.data.data);
-  const [country, setCountry] = useState(null);
-  const [states, setStates] = useState([]);
-  const { data: { data: countries = [] } = {}, isLoading: isLoadingCountries } =
-    useGetCountry();
-  const { mutateAsync: mutate, isPending: isLoadingStates } = useGetState();
+  const [district, setDistrict] = useState(null);
+  const [districtLga, setDistrictLga] = useState([]);
+  const { data: { data: districts = [] } = {}, isLoading: isLoadingDistrict } =
+    useGetDistrict();
+  const { mutateAsync: mutate, isPending: isLoadingDistrictLga } =
+    useGetDistrictLGA();
 
-  const nationality = countries.map((item) => ({
+  const formattedDistrict = districts.map((item) => ({
     value: item.id,
-    label: item.nationality,
+    label: item.name,
   }));
-  const handleGetStates = async (nationality_id) => {
-    const { data = [] } = await mutate(nationality_id);
-    setStates((prev) => {
-      return data.map((item) => ({
-        value: item.id,
-        label: item.name,
-      }));
-    });
-  };
-  useEffect(() => {
-    if (country) {
-      handleGetStates(country);
-    }
-  }, [country]);
 
+  useEffect(() => {
+    (async () => {
+      if (district) {
+        const { data = [] } = await mutate(district);
+        setDistrictLga((prev) => {
+          return data.map((item) => ({
+            value: item.id,
+            label: item.name,
+          }));
+        });
+      }
+    })();
+  }, [district]);
+
+  // console.log(previousData);
+ 
   const formik = useFormik({
     initialValues: {
-      nationality: "",
-      state_of_origin: "",
-      rider_id: "",
+      work_district: previousData.work_district??"",
+      work_lga: previousData.work_lga??"",
+      work_union:  previousData.work_union??"",
     },
     onSubmit: (values) => {
-      updateData({ step: "contact", data: { ...previousData, ...values } });
+      updateData({ step: "identity", data: { ...previousData, ...values } });
     },
     validationSchema: Yup.object().shape({
-      nationality: Yup.string().required("Nationality is required"),
-      state_of_origin: Yup.string().required("State of origin is required"),
-      rider_id: Yup.string(),
+      work_district: Yup.string().required("Work District is required"),
+      work_lga: Yup.string().required(
+        "Work District Local Government is required"
+      ),
+      work_union: Yup.string().required("Work Union is required"),
     }),
   });
   const handleSubmit = () => {
     formik.handleSubmit();
   };
-
   const ErrorMessage = ({ name }) => {
     if (formik.touched[name] && formik.errors[name]) {
       return (
@@ -68,32 +72,32 @@ const Nationality = ({ onNext, onPrev, onClose } = {}) => {
   return (
     <AnimationWrapper>
       <section className=" py-4 px-6">
-        <h1 className="text-bold text-2xl text-center">Nationality</h1>
+        <h1 className="text-bold text-2xl text-center">Work Detail's</h1>
         <div className="space-y-6 pb-9">
           <div className=" flex flex-col space-y-1">
             <label
               htmlFor="email"
               className="font-medium text-gray-600 text-sm"
             >
-              Nationality
+              Work District
             </label>
             <Select
-              placeholder="Nationality"
-              isLoading={isLoadingCountries}
-              isDisabled={isLoadingCountries}
-              defaultInputValue={country}
+              placeholder="Work District"
+              isLoading={isLoadingDistrict}
+              isDisabled={isLoadingDistrict}
+              defaultInputValue={district}
               onChange={({ value }) => {
-                setCountry(value);
-                const find = nationality.find(
+                setDistrict(value);
+                setDistrictLga([]);
+                const find = formattedDistrict.find(
                   (item) => item.value === value
                 ).label;
-                formik.setFieldValue("nationality", find);
-                setStates([]);
+                formik.setFieldValue("work_district", find);
               }}
-              options={nationality}
+              options={formattedDistrict}
               className=""
             />
-            <ErrorMessage name="nationality" />
+            <ErrorMessage name="work_district" />
           </div>
 
           <div className=" flex flex-col space-y-1">
@@ -101,20 +105,22 @@ const Nationality = ({ onNext, onPrev, onClose } = {}) => {
               htmlFor="email"
               className="font-medium text-gray-600 text-sm"
             >
-              State of origin
+              Work District Local Government
             </label>
             <Select
-              isDisabled={isLoadingStates || country === null}
-              isLoading={isLoadingStates}
-              placeholder="State of origin"
-              options={states}
+              isDisabled={isLoadingDistrictLga || district === null}
+              isLoading={isLoadingDistrictLga}
+              placeholder="Work District Local Government"
+              options={districtLga}
               onChange={({ value }) => {
-                const find = states.find((item) => item.value === value).label;
-                formik.setFieldValue("state_of_origin", find);
+                const find = districtLga.find(
+                  (item) => item.value === value
+                ).label;
+                formik.setFieldValue("work_lga", find);
               }}
               className=""
             />
-            <ErrorMessage name="state_of_origin" />
+            <ErrorMessage name="work_lga" />
           </div>
 
           <div className=" flex flex-col space-y-1">
@@ -122,19 +128,19 @@ const Nationality = ({ onNext, onPrev, onClose } = {}) => {
               htmlFor="email"
               className="font-medium text-gray-600 text-sm"
             >
-              Rider Identity
+              Work Union
             </label>
             <input
               type="text"
               id="email"
-              name="rider_id"
-              placeholder="Rider Identity"
+              name="work_union"
               onChange={formik.handleChange}
-              value={formik.values.rider_id}
+              value={formik.values.work_union}
               onBlur={formik.handleBlur}
+              placeholder="Work Union"
               className="mt-1 w-full border bg-white py-4 lg:py-[0.575rem] px-3 focus:outline-none text-gray-800 rounded text-[13px]"
             />
-            <ErrorMessage name="rider_id" />
+            <ErrorMessage name="work_union" />
           </div>
 
           <div className="mt-6 flex justify-between">
@@ -169,8 +175,8 @@ const Nationality = ({ onNext, onPrev, onClose } = {}) => {
   );
 };
 
-export default Nationality;
-Nationality.prototype = {
+export default Work;
+Work.prototype = {
   onNext: PropTypes.func,
   onPrev: PropTypes.func,
   onClose: PropTypes.func,

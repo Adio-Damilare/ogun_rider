@@ -6,12 +6,18 @@ import {
   TbCheck,
 } from "react-icons/tb";
 import { BiSolidUser } from "react-icons/bi";
-import { LuCombine, LuWorkflow } from "react-icons/lu";
+import { LuCombine,  } from "react-icons/lu";
 import { cn, Drawer, DrawerContent } from "@heroui/react";
+import { FaPhoneAlt,FaBriefcase,FaCreditCard } from "react-icons/fa";
+import { HiIdentification } from "react-icons/hi2";
+import { BiIdCard } from "react-icons/bi";
 import PropTypes from "prop-types";
 import riderStore from "@/hooks/newRider.js";
 import Personal from "@/component/core/Rider/Personal.jsx";
 import Nationality from "@/component/core/Rider/Nationality";
+import Contact from "@/component/core/Rider/Contact";
+import Work from "@/component/core/Rider/Work";
+import Identity from "@/component/core/Rider/Identity";
 
 const steps = [
   {
@@ -23,37 +29,37 @@ const steps = [
   {
     key: "nationality",
     title: "Nationality",
-    icon: <TbSettings size="18" />,
+    icon: <BiIdCard size="18" />,
     element: Nationality,
   },
   {
     key: "contact",
     title: "Contact Details",
-    icon: <TbTemplate size="18" />,
-    element: <></>,
+    icon: <FaPhoneAlt size="18" />,
+    element: Contact,
   },
   {
-    key: "Work",
+    key: "work",
     title: "Work Detail's",
-    icon: <LuWorkflow size="18" />,
-    element: <></>,
+    icon: <FaBriefcase size="18" />,
+    element: Work
   },
   {
     key: "identity",
     title: "Identity",
-    icon: <TbList size="18" />,
-    element: <></>,
+    icon: <HiIdentification size="18" />,
+    element: Identity
   },
   {
     key: "payment",
     title: "Payment",
-    icon: <LuCombine size="16" />,
+    icon: <FaCreditCard size="18" />,
     element: <></>,
   },
   {
     key: "payment-confirmation",
     title: "Payment Confirmation",
-    icon: <LuCombine size="16" />,
+    icon: <FaCreditCard size="18" />,
     element: <></>,
   },
 ].filter((i) => !i.disabled);
@@ -86,7 +92,7 @@ const NewRider = () => {
   return (
     <Drawer
       isOpen={isOpen}
-      onClose={handleClose}
+      onClose={()=>{}}
       hideCloseButton
       classNames={{ base: "w-[900px]" }}
     >

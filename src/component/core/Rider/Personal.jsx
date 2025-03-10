@@ -1,8 +1,11 @@
 import React from "react";
 import PropTypes from "prop-types";
 import Select from "react-select";
-import useRiderState from "@/hooks/newRider"
+import useRiderState from "@/hooks/newRider";
 import { Button, DatePicker } from "antd";
+import AnimationWrapper from "@/component/core/Rider/AnimationWrapper.jsx";
+import { useFormik } from "formik";
+import * as Yup from "yup";
 const genders = [
   {
     value: "male",
@@ -33,130 +36,201 @@ const marital = [
 ];
 
 const Personal = ({ onNext, onPrev, onClose } = {}) => {
-  const updateData=useRiderState((state)=>state.updateData);
-  const handleSubmit=()=>{
-    updateData({step:"nationality"})
-  }
+  const updateData = useRiderState((state) => state.updateData);
+  const data = useRiderState((state) => state.data.data);
+
+  const form = useFormik({
+    initialValues: {
+      first_name: "",
+      last_name: "",
+      other_name: "",
+      gender: "",
+      marital_status: "",
+      maiden_name: "",
+      dob: "",
+    },
+    onSubmit: (values) => {
+      updateData({ step: "nationality", data: { ...data, ...values } });
+    },
+    validationSchema: Yup.object().shape({
+      first_name: Yup.string().required("First Name is required"),
+      last_name: Yup.string().required("Last Name is required"),
+      other_name: Yup.string().required("Other Name is required"),
+      gender: Yup.string().required("Gender is required"),
+      marital_status: Yup.string().required("Marital Status is required"),
+      maiden_name: Yup.string().required("Maiden Name is required"),
+      dob: Yup.string().required("Date of Birth is required"),
+    }),
+  });
+  const handleSubmit = () => {
+    form.handleSubmit();
+    // updateData({ step: "nationality" });
+  };
+
+  const ErrorMessage = ({ name }) => {
+    if (form.touched[name] && form.errors[name]) {
+      return (
+        <div className="text-red-500 italic text-[0.8rem] mt-1">
+          {form.errors[name]}
+        </div>
+      );
+    }
+    return null;
+  };
   return (
-    <section className=" py-4 px-6">
-      <h1 className="text-bold text-2xl text-center">Personal Information</h1>
-      <div className="space-y-6 pb-9">
-        <div className=" flex flex-col space-y-1">
-          <label htmlFor="email" className="font-medium text-gray-600 text-sm">
-            First Name
-          </label>
-          <input
-            type="text"
-            id="email"
-            name="fist_name"
-            placeholder="First Name"
-            className="mt-1 w-full border bg-white py-4 lg:py-[0.575rem] px-3 focus:outline-none text-gray-800 rounded text-[13px]"
-          />
-          {/* {errors.email && (
-                <span className="text-red-500 text-xs">
-                  This field is required
-                </span>
-              )} */}
-        </div>
-        <div className=" flex flex-col space-y-1">
-          <label htmlFor="email" className="font-medium text-gray-600 text-sm">
-            Last Name
-          </label>
-          <input
-            type="text"
-            id="email"
-            name="last_name"
-            placeholder="Last Name"
-            className="mt-1 w-full border bg-white py-4 lg:py-[0.575rem] px-3 focus:outline-none text-gray-800 rounded text-[13px]"
-          />
-          {/* {errors.email && (
-                <span className="text-red-500 text-xs">
-                  This field is required
-                </span>
-              )} */}
-        </div>
-        <div className=" flex flex-col space-y-1">
-          <label htmlFor="email" className="font-medium text-gray-600 text-sm">
-            Other Name
-          </label>
-          <input
-            type="text"
-            id="email"
-            name="other_name"
-            placeholder="Other Name"
-            className="mt-1 w-full border bg-white py-4 lg:py-[0.575rem] px-3 focus:outline-none text-gray-800 rounded text-[13px]"
-          />
-          {/* {errors.email && (
-                <span className="text-red-500 text-xs">
-                  This field is required
-                </span>
-              )} */}
-        </div>
+    <AnimationWrapper>
+      <section className=" py-4 px-6">
+        <h1 className="text-bold text-2xl text-center">Personal Detail's</h1>
+        <div className="space-y-6 pb-9">
+          <div className=" flex flex-col space-y-1">
+            <label
+              htmlFor="email"
+              className="font-medium text-gray-600 text-sm"
+            >
+              First Name
+            </label>
+            <input
+              type="text"
+              id="email"
+              name="first_name"
+              onChange={form.handleChange}
+              value={form.values.first_name}
+              onBlur={form.handleBlur}
+              placeholder="First Name"
+              className="mt-1 w-full border bg-white py-4 lg:py-[0.575rem] px-3 focus:outline-none text-gray-800 rounded text-[13px]"
+            />
+            <ErrorMessage name="first_name" />
+          </div>
+          <div className=" flex flex-col space-y-1">
+            <label
+              htmlFor="email"
+              className="font-medium text-gray-600 text-sm"
+            >
+              Last Name
+            </label>
+            <input
+              type="text"
+              id="email"
+              name="last_name"
+              onChange={form.handleChange}
+              value={form.values.last_name}
+              onBlur={form.handleBlur}
+              placeholder="Last Name"
+              className="mt-1 w-full border bg-white py-4 lg:py-[0.575rem] px-3 focus:outline-none text-gray-800 rounded text-[13px]"
+            />
+            <ErrorMessage name="last_name" />
+          </div>
+          <div className=" flex flex-col space-y-1">
+            <label
+              htmlFor="email"
+              className="font-medium text-gray-600 text-sm"
+            >
+              Other Name
+            </label>
+            <input
+              type="text"
+              id="email"
+              name="other_name"
+              onChange={form.handleChange}
+              value={form.values.other_name}
+              onBlur={form.handleBlur}
+              placeholder="Other Name"
+              className="mt-1 w-full border bg-white py-4 lg:py-[0.575rem] px-3 focus:outline-none text-gray-800 rounded text-[13px]"
+            />
+            <ErrorMessage name="other_name" />
+          </div>
 
-        <div className=" flex flex-col space-y-1">
-          <label htmlFor="email" className="font-medium text-gray-600 text-sm">
-            Gender
-          </label>
-          <Select placeholder="Gender" options={genders} className="" />
-          {/* {errors.email && (
-                <span className="text-red-500 text-xs">
-                  This field is required
-                </span>
-              )} */}
-        </div>
+          <div className=" flex flex-col space-y-1">
+            <label
+              htmlFor="email"
+              className="font-medium text-gray-600 text-sm"
+            >
+              Gender
+            </label>
+            <Select
+              placeholder="Gender"
+              name="gender"
+              onChange={({ value }) => form.setFieldValue("gender", value)}
+              defaultValue={form.values.gender}
+              // onBlur={form.handleBlur}
+              options={genders}
+              className=""
+            />
+            <ErrorMessage name="gender" />
+          </div>
 
-        <div className=" flex flex-col space-y-1">
-          <label htmlFor="email" className="font-medium text-gray-600 text-sm">
-            Marital Status
-          </label>
-          <Select placeholder="Marital status" options={marital} className="" />
-          {/* {errors.email && (
-                <span className="text-red-500 text-xs">
-                  This field is required
-                </span>
-              )} */}
-        </div>
+          <div className=" flex flex-col space-y-1">
+            <label
+              htmlFor="email"
+              className="font-medium text-gray-600 text-sm"
+            >
+              Marital Status
+            </label>
+            <Select
+              placeholder="Marital status"
+              name="marital_status"
+              onChange={({ value }) =>
+                form.setFieldValue("marital_status", value)
+              }
+              defaultValue={form.values.marital_status}
+              onBlur={form.handleBlur}
+              options={marital}
+              className=""
+            />
+            <ErrorMessage name="marital_status" />
+          </div>
 
-        <div className=" flex flex-col space-y-1">
-          <label htmlFor="email" className="font-medium text-gray-600 text-sm">
-            Maiden Name
-          </label>
-          <input
-            type="text"
-            id="email"
-            name="maiden_name"
-            placeholder="Maiden Name"
-            className="mt-1 w-full border bg-white py-4 lg:py-[0.575rem] px-3 focus:outline-none text-gray-800 rounded text-[13px]"
-          />
-          {/* {errors.email && (
-                <span className="text-red-500 text-xs">
-                  This field is required
-                </span>
-              )} */}
+          <div className=" flex flex-col space-y-1">
+            <label
+              htmlFor="email"
+              className="font-medium text-gray-600 text-sm"
+            >
+              Maiden Name
+            </label>
+            <input
+              type="text"
+              id="email"
+              name="maiden_name"
+              onChange={form.handleChange}
+              value={form.values.maiden_name}
+              onBlur={form.handleBlur}
+              placeholder="Maiden Name"
+              className="mt-1 w-full border bg-white py-4 lg:py-[0.575rem] px-3 focus:outline-none text-gray-800 rounded text-[13px]"
+            />
+            <ErrorMessage name="maiden_name" />
+          </div>
+          <div className=" flex flex-col space-y-1">
+            <label
+              htmlFor="email"
+              className="font-medium text-gray-600 text-sm"
+            >
+              Date of Birth
+            </label>
+            <DatePicker
+              className=" py-2 focus:border-none"
+              name="dob"
+              onChange={(e) => {
+                form.setFieldValue("dob", e);
+              }}
+              defaultValue={form.values.dob}
+              onBlur={form.handleBlur}
+              label="Birth of date"
+            />
+            <ErrorMessage name="dob" />
+          </div>
+          <div className="mt-6">
+            <Button
+              size="middle"
+              onClick={handleSubmit}
+              type="submit"
+              className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+            >
+              Next
+            </Button>
+          </div>
         </div>
-        <div className=" flex flex-col space-y-1">
-          <label htmlFor="email" className="font-medium text-gray-600 text-sm">
-            Date of Birth
-          </label>
-          <DatePicker className=" py-2 focus:border-none" label="Birth date" />
-          {/* {errors.email && (
-                <span className="text-red-500 text-xs">
-                  This field is required
-                </span>
-              )} */}
-        </div>
-        <div className="mt-6">
-          <Button
-            size="middle"
-            onClick={handleSubmit}
-            type="submit"
-            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-          >
-            Next
-          </Button>
-        </div>
-      </div>
-    </section>
+      </section>
+    </AnimationWrapper>
   );
 };
 
