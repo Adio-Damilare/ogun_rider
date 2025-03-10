@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 // import DropdownNotification from "../../../layout/components/DropdownNotification.jsx";
 import useCurrentUser from "../../../hooks/useCurrentUser.js";
 
+
 const SidebarHeader = () => {
   const navigate = useNavigate();
 

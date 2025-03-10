@@ -3,6 +3,7 @@ import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import "../../assets/styles/mainLayout.css";
 import useWindowSize from "../../hooks/useWindowSize";
 import SidebarHeader from "../../component/core/sidebar/SidebarHeader";
+import Sidebar from "../../component/core/sidebar";
 import useCurrentUser from "../../hooks/useCurrentUser";
 
 const MainLayout = () => {
@@ -35,7 +36,7 @@ const MainLayout = () => {
       <main>
         <SidebarHeader />
         <section
-          className={`lg:!px-20 !px-7 ${
+          className={` gap-4  h-screen grid grid-cols-[auto_1fr]   ${
             !navIsOpen ? "page no_sidebar" : "page page-with-navbar"
           }`}
           onClick={() => {
@@ -44,6 +45,9 @@ const MainLayout = () => {
             }
           }}
         >
+          <div>
+           <Sidebar/>
+          </div>
           <div className="">
             <div className="my-5">
               <h3 className="text-[22px] font-medium leading-[23px] tracking-[0.5px] text-[#1F384C] capitalize">

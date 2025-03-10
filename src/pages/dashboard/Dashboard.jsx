@@ -1,6 +1,5 @@
 /* eslint-disable no-unused-vars */
 import { useCallback, useState } from "react";
-import InventoryRecords from "../../component/core/dashboard/InventoryRecords";
 import RecentActivity from "../../component/core/dashboard/RecentActivity";
 import MemoTopCards from "../../component/shared/topCards/MemoTopCards";
 import CreateInventorySvg from "../../component/shared/svg_icons/create_inventory";
@@ -36,34 +35,6 @@ const Dashboard = () => {
 
   const [selected, setSelected] = useState("all");
 
-  const { data: getInstockRecord, isLoading: stockRecordLoading } =
-    useGetInstockRecord({
-      staff_id: userData?.data?.STAFF_ID,
-      region_id: userData?.data?.REGION,
-      start_date: "",
-      end_date: "",
-    });
-
-  const { data: outstoreRecord, isLoading: outstoreRecordLoading } =
-    useGetOutstoreRecord({
-      staff_id: userData?.data?.STAFF_ID,
-      region_id: userData?.data?.REGION,
-      start_date: "",
-      end_date: "",
-    });
-
-  const { data: dashboardData, isLoading: dashboardDataLoading } =
-    useGetDashboardData({
-      region_id: userData?.data?.REGION,
-    });
-
-  const lastSixInflowChartData = formatInflowAndOutflowChartChart(
-    dashboardData?.last_six_month_inflow_graph
-  );
-  const lastSixOutflowChartData = formatInflowAndOutflowChartChart(
-    dashboardData?.last_six_month_outflow_graph
-  );
-
   return (
     <>
       <main>
@@ -74,16 +45,9 @@ const Dashboard = () => {
                 <MemoTopCards
                   memos={[]}
                   setSelected={setSelected}
-                  userData={userData}
+                  userData={[]}
                   dataCount={{
-                    total: {
-                      count: formatNaira(dashboardData?.instore_total || 0),
-                      loading: dashboardDataLoading,
-                    },
-                    outstore: {
-                      count: outstoreRecord?.length,
-                      loading: outstoreRecordLoading,
-                    },
+                    
                   }}
                 />
               </div>
@@ -92,45 +56,35 @@ const Dashboard = () => {
                   <BarChartStat
                     seriesColor={"#FFDEAD"}
                     legendTitle={["Last Six Month Inflow"]}
-                    seriesData={lastSixInflowChartData?.seriesData}
-                    xAxisData={lastSixInflowChartData?.xAxis}
+                    seriesData={[]}
+                    xAxisData={[]}
                   />
                 </div>
                 <div className="border rounded w-full p-3 bg-white">
                   <BarChartStat
                     seriesColor={"#7B68EE"}
                     legendTitle={["Last Six Month Outflow"]}
-                    seriesData={lastSixOutflowChartData?.seriesData}
-                    xAxisData={lastSixOutflowChartData?.xAxis}
+                    seriesData={[]}
+                    xAxisData={[]}
                   />
                 </div>
               </div>
-              <div className="col-span-3">
-                <AddStoreCard />
-              </div>
+            
             </div>
           </div>
           <div className="md:col-span-1 col-span-3 space-y-5 transition-all duration-300">
             <RecentActivity
               title={"latest inflows"}
-              latestData={dashboardData?.latest_inflows}
-              isLoading={dashboardDataLoading}
+              latestData={[]}
+              isLoading={[]}
             />
             <RecentActivity
               title={"latest outflows"}
-              latestData={dashboardData?.latest_outflows || []}
-              isLoading={dashboardDataLoading}
+              latestData={[]|| []}
+              isLoading={[]}
             />
           </div>
         </section>
-        <div className="mt-5 flex items-center relative gap-4">
-          <h3 className="text-[17px] text-black tracking-[0.5px] leading-[22px]">
-            <span>Inventory Record</span>
-          </h3>
-
-          <div className="w-full h-[0.1rem] bg-neutral-300 bg-opacity-35 flex-1"></div>
-        </div>
-        <InventoryRecords userData={userData} />
       </main>
     </>
   );
