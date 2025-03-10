@@ -8,7 +8,7 @@ import {
   TableColumn,
   TableHeader,
   TableRow,
-} from "@nextui-org/react";
+} from "@heroui/react";
 import StarLoader from "../../core/loaders/StarLoader";
 import moment from "moment";
 

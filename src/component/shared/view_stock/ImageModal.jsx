@@ -2,7 +2,7 @@ import { Modal } from "antd";
 import PropTypes, { bool } from "prop-types";
 import { IoIosClose } from "react-icons/io";
 import DocumentFilePreview from "../file_preview/DocumentFilePreview";
-import { cn } from "@nextui-org/react";
+import { cn } from "@heroui/react";
 
 const ImageModal = ({ isOpen, onClose, src, isDoc }) => {
   if (!src) {

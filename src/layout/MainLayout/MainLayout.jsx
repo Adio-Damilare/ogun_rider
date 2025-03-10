@@ -1,10 +1,11 @@
 import { useState, useEffect } from "react";
-import { Outlet, useLocation, useNavigate } from "react-router-dom";
+import { Outlet, useNavigate } from "react-router-dom";
 import "../../assets/styles/mainLayout.css";
-import useWindowSize from "../../hooks/useWindowSize";
-import SidebarHeader from "../../component/core/sidebar/SidebarHeader";
-import Sidebar from "../../component/core/sidebar";
-import useCurrentUser from "../../hooks/useCurrentUser";
+import useWindowSize from "@/hooks/useWindowSize";
+import SidebarHeader from "@/component/core/sidebar/SidebarHeader";
+import Sidebar from "@/component/core/sidebar";
+import useCurrentUser from "@/hooks/useCurrentUser";
+import NewRider from "@/component/core/Rider/NewRider";
 
 const MainLayout = () => {
   const [navIsOpen, setNavIsOpen] = useState(true);
@@ -18,48 +19,31 @@ const MainLayout = () => {
     }
   }, [userData, navigate]);
 
-  const handleOpenNav = (param) => {
-    setNavIsOpen(param);
-  };
+  // const handleOpenNav = (param) => {
+  //   setNavIsOpen(param);
+  // };
   useEffect(() => {
     if (window.innerWidth < 768) {
       setNavIsOpen(false);
     }
   }, []);
 
-  const activePath = useLocation().pathname;
-
-  const current_page = activePath.split("/").pop()?.replace(/_/g, " ");
-
   return (
     <>
       <main>
-        <SidebarHeader />
         <section
-          className={` gap-4  h-screen grid grid-cols-[auto_1fr]   ${
-            !navIsOpen ? "page no_sidebar" : "page page-with-navbar"
-          }`}
-          onClick={() => {
-            if (windowSize.width < 768) {
-              navIsOpen && handleOpenNav(false);
-            }
-          }}
+          className={` h-screen overflow-hidden grid grid-cols-[auto_1fr]`}
         >
-          <div>
-           <Sidebar/>
-          </div>
-          <div className="">
-            <div className="my-5">
-              <h3 className="text-[22px] font-medium leading-[23px] tracking-[0.5px] text-[#1F384C] capitalize">
-                {current_page}
-              </h3>
-            </div>
-            <div className="mt-4">
+          <Sidebar />
+          <div className="space-y-4   overflow-auto">
+            <SidebarHeader />
+            <div className="px-4 py-2 ">
               <Outlet />
             </div>
           </div>
         </section>
       </main>
+      <NewRider />
     </>
   );
 };

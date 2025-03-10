@@ -1,4 +1,4 @@
-import { Avatar, AvatarGroupProvider, useAvatarGroup } from "@nextui-org/react";
+import { Avatar, AvatarGroupProvider, useAvatarGroup } from "@heroui/react";
 import { forwardRef } from "react";
 
 

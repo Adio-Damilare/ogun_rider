@@ -1,5 +1,5 @@
 import React from "react";
-import { useGetRider } from "../../../services/API";
+import { useGetRider } from "@/services/API";
 import { useParams } from "react-router-dom";
 
 const index = () => {

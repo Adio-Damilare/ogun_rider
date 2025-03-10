@@ -7,7 +7,7 @@ import {
   TableColumn,
   TableHeader,
   TableRow,
-} from "@nextui-org/react";
+} from "@heroui/react";
 import PropTypes from "prop-types";
 import { DatePicker, Empty } from "antd";
 import { useMemo, useState } from "react";

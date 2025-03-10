@@ -3,11 +3,11 @@ import { useState } from "react";
 import { FaEyeSlash } from "react-icons/fa";
 import { FaEye } from "react-icons/fa";
 import { useForm } from "react-hook-form";
-import { useLogin } from "../../services/API";
+import { useLogin } from "@/services/API";
 import { Button, ConfigProvider } from "antd";
-import useCurrentUser from "../../hooks/useCurrentUser";
+import useCurrentUser from "@/hooks/useCurrentUser";
 import { useNavigate } from "react-router-dom";
-import { errorToast } from "../../utils/toastPopUp";
+import { errorToast } from "@/utils/toastPopUp";
 const Login = () => {
   const [passwordVisible, setPasswordVisible] = useState(false);
   const { mutate, isPending } = useLogin();

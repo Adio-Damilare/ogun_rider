@@ -1,10 +1,9 @@
-import MainLayout from "./layout/MainLayout/MainLayout";
+import MainLayout from "@/layout/MainLayout/MainLayout";
 import { Route, Routes } from "react-router-dom";
-import Dashboard from "./pages/dashboard/Dashboard";
-import Login from "./pages/login/Login";
-// import GlobalProviders from "./lib/GlobalProvider";
-import OutputRecord from "./pages/outputRecord/Output";
-import Rider from "./pages/Rider/View"
+import Dashboard from "@/pages/dashboard/Dashboard";
+import Login from "@/pages/login/Login";
+import ViewRiderDetails from "@/pages/Rider/View"
+import Rider from "@/pages/Rider"
 
 const App = () => {
   
@@ -16,11 +15,10 @@ const App = () => {
         <Route path="/login" element={<Login />} />
         <Route path="" element={<MainLayout />}>
           <Route path="" element={<Dashboard />} />
-          <Route path="/output" element={<OutputRecord />} />
+          <Route path="/rider" element={<Rider />} />
         </Route>
-        <Route path="/rider/:rider" element={<Rider />} />
+        <Route path="/rider/:rider" element={<ViewRiderDetails />} />
       </Routes>
-      {/* <GlobalProviders/> */}
     </>
   );
 };

@@ -1,6 +1,6 @@
 /* eslint-disable react/prop-types */
 /* eslint-disable no-unused-vars */
-import { Spinner } from "@nextui-org/react";
+import { Spinner } from "@heroui/react";
 import { useCallback, useState } from "react";
 
 import axios from "axios";

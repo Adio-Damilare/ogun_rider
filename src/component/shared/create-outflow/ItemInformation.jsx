@@ -14,7 +14,7 @@ import {
   useGetAllDepartment,
   useGetAllStaff,
 } from "../../../services/get_data";
-import { Avatar, cn } from "@nextui-org/react";
+import { Avatar, cn } from "@heroui/react";
 import { filePrefix } from "../../../utils/filePrefix";
 
 const ItemInformation = ({

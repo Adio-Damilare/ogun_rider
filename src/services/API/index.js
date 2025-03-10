@@ -22,3 +22,24 @@ export const useGetRider = (payload) => {
     queryKey: ["rider"],
   });
 };
+
+export const useGetCountry = () => {
+  return useQuery({
+    queryKey: ['country'],
+    queryFn: async() => {
+      const res=await  http.get('/og_resources/get_nationality', { intercept: false });
+      return res.data;
+    },
+
+  });
+};
+export const useGetState = () => {
+  return useQuery({
+    queryKey: ['state'],
+    queryFn: async(nationality_id)=>{
+      const res=await  http.get(`/og_resources/get_state/${nationality_id}`, { intercept: false });
+      return res.data;
+    },
+
+  });
+};

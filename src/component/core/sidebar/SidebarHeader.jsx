@@ -13,18 +13,7 @@ const SidebarHeader = () => {
     <>
       <div className="flex justify-between items-center py-3 shadow lg:px-20 px-5 bg-white">
         <div className="flex gap-x-4 items-center">
-          <div className="flex items-center gap-x-1">
-            <img
-              src={'/logo2.jpeg'}
-              alt="logo"
-              width={40}
-              className="cursor-pointer"
-              onClick={() => navigate("/")}
-            />
-            <span className="font-bold leading-3 text-lg hidden sm:block text-[#2c3679]">
-              Admin
-            </span>
-          </div>
+          
           <div className="relative hidden md:block">
             <label htmlFor="Search" className="sr-only">
               Search

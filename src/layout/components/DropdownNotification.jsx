@@ -6,7 +6,7 @@ import useCurrentUser from "../../hooks/useCurrentUser";
 import { toStringDate } from "../../utils/utilities";
 import { Link } from "react-router-dom";
 import { BsBellFill } from "react-icons/bs";
-import { cn, } from "@nextui-org/react";
+import { cn, } from "@heroui/react";
 import { BiQuestionMark, BiUser } from "react-icons/bi";
 import { ImCancelCircle } from "react-icons/im";
 import { Avatar, Button } from "antd";

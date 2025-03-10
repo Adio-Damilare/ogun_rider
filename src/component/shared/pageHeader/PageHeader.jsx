@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-vars */
 import { Fragment } from 'react'
-import {Breadcrumbs, BreadcrumbItem, Button} from "@nextui-org/react";
+import {Breadcrumbs, BreadcrumbItem, Button} from "@heroui/react";
 import PropType from "prop-types"
 import "../../../assets/styles/pageHeader.css";
 import { Link } from "react-router-dom"
