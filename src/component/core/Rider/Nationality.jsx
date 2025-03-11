@@ -11,7 +11,6 @@ import * as Yup from "yup";
 const Nationality = ({ onNext, onPrev, onClose } = {}) => {
   const updateData = useRiderState((state) => state.updateData);
   const previousData = useRiderState((state) => state.data.data);
-  const [country, setCountry] = useState(null);
   const [states, setStates] = useState([]);
   const { data: { data: countries = [] } = {}, isLoading: isLoadingCountries } =
     useGetCountry();
@@ -30,17 +29,13 @@ const Nationality = ({ onNext, onPrev, onClose } = {}) => {
       }));
     });
   };
-  useEffect(() => {
-    if (country) {
-      handleGetStates(country);
-    }
-  }, [country]);
+
 
   const formik = useFormik({
     initialValues: {
-      nationality: "",
-      state_of_origin: "",
-      rider_id: "",
+      nationality:previousData.nationality??"",
+      state_of_origin: previousData.state_of_origin??"",
+      rider_id: previousData.rider_id??"",
     },
     onSubmit: (values) => {
       updateData({ step: "contact", data: { ...previousData, ...values } });
@@ -51,6 +46,17 @@ const Nationality = ({ onNext, onPrev, onClose } = {}) => {
       rider_id: Yup.string(),
     }),
   });
+
+  useEffect(() => {
+    if (formik.values.nationality) {
+      const country=nationality.find((item) => item.label === formik.values.nationality)?.value;
+      if(!country)return;
+      console.log(country)
+      handleGetStates(country);
+
+    }
+  }, [formik.values.nationality]);
+
   const handleSubmit = () => {
     formik.handleSubmit();
   };
@@ -81,14 +87,13 @@ const Nationality = ({ onNext, onPrev, onClose } = {}) => {
               placeholder="Nationality"
               isLoading={isLoadingCountries}
               isDisabled={isLoadingCountries}
-              defaultInputValue={country}
+              value={nationality.find((item) => item.label === formik.values.nationality)}
               onChange={({ value }) => {
-                setCountry(value);
+                setStates([]);
                 const find = nationality.find(
                   (item) => item.value === value
                 ).label;
                 formik.setFieldValue("nationality", find);
-                setStates([]);
               }}
               options={nationality}
               className=""
@@ -104,9 +109,10 @@ const Nationality = ({ onNext, onPrev, onClose } = {}) => {
               State of origin
             </label>
             <Select
-              isDisabled={isLoadingStates || country === null}
+              isDisabled={isLoadingStates || !formik.values.nationality}
               isLoading={isLoadingStates}
               placeholder="State of origin"
+              value={states.find((item) => item.label === formik.values.state_of_origin)}
               options={states}
               onChange={({ value }) => {
                 const find = states.find((item) => item.value === value).label;
@@ -141,6 +147,9 @@ const Nationality = ({ onNext, onPrev, onClose } = {}) => {
             <Button
               size="middle"
               type="submit"
+              onClick={()=>{
+                updateData({step:"personal"})
+              }}
               className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-5 px-4 rounded"
             >
               Back

@@ -6,6 +6,7 @@ import { Button, DatePicker } from "antd";
 import AnimationWrapper from "@/component/core/Rider/AnimationWrapper.jsx";
 import { useFormik } from "formik";
 import * as Yup from "yup";
+import dayjs from "dayjs";
 const genders = [
   {
     value: "male",
@@ -41,13 +42,13 @@ const Personal = ({ onNext, onPrev, onClose } = {}) => {
 
   const form = useFormik({
     initialValues: {
-      first_name: "",
-      last_name: "",
-      other_name: "",
-      gender: "",
-      marital_status: "",
-      maiden_name: "",
-      dob: "",
+      first_name: data.first_name ?? "",
+      last_name: data.last_name ?? "",
+      other_name: data.other_name ?? "",
+      gender: data.gender ?? "",
+      marital_status: data.marital_status ?? "",
+      maiden_name: data.maiden_name ?? "",
+      dob: data.dob ?? "",
     },
     onSubmit: (values) => {
       updateData({ step: "nationality", data: { ...data, ...values } });
@@ -57,7 +58,12 @@ const Personal = ({ onNext, onPrev, onClose } = {}) => {
       last_name: Yup.string().required("Last Name is required"),
       other_name: Yup.string().required("Other Name is required"),
       gender: Yup.string().required("Gender is required"),
-      marital_status: Yup.string().required("Marital Status is required"),
+      marital_status: Yup.string().when("gender", {
+        is: (gender) => gender === "female",
+        then: (schema) =>
+          schema.required("Maiden name is required for females"),
+        otherwise: (schema) => schema.notRequired(),
+      }),
       maiden_name: Yup.string().required("Maiden Name is required"),
       dob: Yup.string().required("Date of Birth is required"),
     }),
@@ -151,8 +157,7 @@ const Personal = ({ onNext, onPrev, onClose } = {}) => {
               placeholder="Gender"
               name="gender"
               onChange={({ value }) => form.setFieldValue("gender", value)}
-              defaultValue={form.values.gender}
-              // onBlur={form.handleBlur}
+              value={genders.find((item) => item.value === form.values.gender)}
               options={genders}
               className=""
             />
@@ -172,8 +177,7 @@ const Personal = ({ onNext, onPrev, onClose } = {}) => {
               onChange={({ value }) =>
                 form.setFieldValue("marital_status", value)
               }
-              defaultValue={form.values.marital_status}
-              onBlur={form.handleBlur}
+              value={marital.find((val)=>val.value ===form.values.marital_status)}
               options={marital}
               className=""
             />
@@ -210,7 +214,8 @@ const Personal = ({ onNext, onPrev, onClose } = {}) => {
               className=" py-2 focus:border-none"
               name="dob"
               onChange={(e) => {
-                form.setFieldValue("dob", e);
+                const formattedDate = dayjs(e).format('DD-MMM-YYYY');
+                form.setFieldValue("dob", formattedDate);
               }}
               defaultValue={form.values.dob}
               onBlur={form.handleBlur}
@@ -223,7 +228,7 @@ const Personal = ({ onNext, onPrev, onClose } = {}) => {
               size="middle"
               onClick={handleSubmit}
               type="submit"
-              className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+              className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-5 px-4 rounded"
             >
               Next
             </Button>

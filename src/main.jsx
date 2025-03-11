@@ -5,7 +5,7 @@ import App from "./App.jsx";
 import { BrowserRouter, useNavigate } from "react-router-dom";
 import { HeroUIProvider} from "@heroui/react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import ToastProvider from "./providers/ToastProvider.jsx";
+import ToastProvider from "@/providers/ToastProvider.jsx";
 
 
 const queryClient = new QueryClient();

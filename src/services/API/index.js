@@ -1,5 +1,7 @@
 import { useMutation, useQuery } from "@tanstack/react-query";
 import http from "../axiosInstance";
+import axios from "axios";
+const IDENTITY_URL= import.meta.env.VITE_IDENTITY_URL;
 
 export const useLogin = () => {
   return useMutation({
@@ -83,6 +85,29 @@ export const useGetDistrictLGA = () => {
         }
       );
       return res?.data;
+    },
+  });
+};
+
+export const useSaveBase64 = () => {
+  return useMutation({
+    mutationFn: async (payload) => {
+      const res = await http.post(
+        `/attachment/baseConversion`,
+        payload,
+        {
+          intercept: false,
+        }
+      );
+      return res?.data;
+    },
+  });
+};
+export const useVerifyDocument = () => {
+  return useMutation({
+    mutationFn: async ({type,number}) => {
+      const res= await axios.post(`${IDENTITY_URL}${type}`,{number})
+      return res.data;
     },
   });
 };

@@ -11,7 +11,6 @@ import * as Yup from "yup";
 const Work = ({ onNext, onPrev, onClose } = {}) => {
   const updateData = useRiderState((state) => state.updateData);
   const previousData = useRiderState((state) => state.data.data);
-  const [district, setDistrict] = useState(null);
   const [districtLga, setDistrictLga] = useState([]);
   const { data: { data: districts = [] } = {}, isLoading: isLoadingDistrict } =
     useGetDistrict();
@@ -23,27 +22,11 @@ const Work = ({ onNext, onPrev, onClose } = {}) => {
     label: item.name,
   }));
 
-  useEffect(() => {
-    (async () => {
-      if (district) {
-        const { data = [] } = await mutate(district);
-        setDistrictLga((prev) => {
-          return data.map((item) => ({
-            value: item.id,
-            label: item.name,
-          }));
-        });
-      }
-    })();
-  }, [district]);
-
-  // console.log(previousData);
- 
   const formik = useFormik({
     initialValues: {
-      work_district: previousData.work_district??"",
-      work_lga: previousData.work_lga??"",
-      work_union:  previousData.work_union??"",
+      work_district: previousData.work_district ?? "",
+      work_lga: previousData.work_lga ?? "",
+      work_union: previousData.work_union ?? "",
     },
     onSubmit: (values) => {
       updateData({ step: "identity", data: { ...previousData, ...values } });
@@ -56,6 +39,24 @@ const Work = ({ onNext, onPrev, onClose } = {}) => {
       work_union: Yup.string().required("Work Union is required"),
     }),
   });
+  useEffect(() => {
+    (async () => {
+      if (formik.values.work_district) {
+        const value = formattedDistrict.find(
+          (item) => item.label === formik.values.work_district
+        )?.value;
+        if(!value) return
+        const { data = [] } = await mutate(value);
+        setDistrictLga((prev) => {
+          return data.map((item) => ({
+            value: item.id,
+            label: item.name,
+          }));
+        });
+      }
+    })();
+  }, [formik.values.work_district]);
+
   const handleSubmit = () => {
     formik.handleSubmit();
   };
@@ -85,9 +86,10 @@ const Work = ({ onNext, onPrev, onClose } = {}) => {
               placeholder="Work District"
               isLoading={isLoadingDistrict}
               isDisabled={isLoadingDistrict}
-              defaultInputValue={district}
+              value={formattedDistrict.find(
+                (item) => item.label === formik.values.work_district
+              )}
               onChange={({ value }) => {
-                setDistrict(value);
                 setDistrictLga([]);
                 const find = formattedDistrict.find(
                   (item) => item.value === value
@@ -108,10 +110,15 @@ const Work = ({ onNext, onPrev, onClose } = {}) => {
               Work District Local Government
             </label>
             <Select
-              isDisabled={isLoadingDistrictLga || district === null}
+              isDisabled={
+                isLoadingDistrictLga || formik.values.work_district === ""
+              }
               isLoading={isLoadingDistrictLga}
               placeholder="Work District Local Government"
               options={districtLga}
+              value={districtLga.find(
+                (item) => item.label === formik.values.work_lga
+              )}
               onChange={({ value }) => {
                 const find = districtLga.find(
                   (item) => item.value === value
@@ -146,6 +153,9 @@ const Work = ({ onNext, onPrev, onClose } = {}) => {
           <div className="mt-6 flex justify-between">
             <Button
               size="middle"
+              onClick={()=>{
+                updateData({step:"contact"})
+              }}
               type="submit"
               className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-5 px-4 rounded"
             >

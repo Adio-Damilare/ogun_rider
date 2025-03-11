@@ -9,7 +9,7 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 
 const Contact = ({ onNext, onPrev, onClose } = {}) => {
-  const [state, setState] = useState("");
+  // const [state, setState] = useState("");
   const updateData = useRiderState((state) => state.updateData);
   const previousData = useRiderState((state) => state.data.data);
   const [states, setStates] = useState([]);
@@ -30,29 +30,14 @@ const Contact = ({ onNext, onPrev, onClose } = {}) => {
     })();
   }, []);
 
-  useEffect(() => {
-    (async () => {
-      if (state) {
-        const { data = [] } = await mutateLGA(state);
-        setLgas((prev) => {
-          return data.map((item) => ({
-            value: item.id,
-            label: item.name,
-          }));
-        });
-      }
-    })();
-  }, [state]);
-
-  
   const formik = useFormik({
     initialValues: {
-      email: "",
-      primary_phone: "",
-      other_phones: "",
-      residential_state: "",
-      residential_lga: "",
-      residential_address: "",
+      email: previousData.email ?? "",
+      primary_phone: previousData.primary_phone ?? "",
+      other_phones: previousData.other_phones ?? "",
+      residential_state: previousData.residential_state ?? "",
+      residential_lga: previousData.residential_lga ?? "",
+      residential_address: previousData.residential_address ?? "",
     },
     onSubmit: (values) => {
       updateData({ step: "work", data: { ...previousData, ...values } });
@@ -70,6 +55,25 @@ const Contact = ({ onNext, onPrev, onClose } = {}) => {
       ),
     }),
   });
+
+  useEffect(() => {
+    (async () => {
+      if (formik.values.residential_state) {
+        const value = states.find(
+          (item) => item.label === formik.values.residential_state
+        )?.value;
+        if(!value) return;
+        const { data = [] } = await mutateLGA(value);
+        setLgas((prev) => {
+          return data.map((item) => ({
+            value: item.id,
+            label: item.name,
+          }));
+        });
+      }
+    })();
+  }, [formik.values.residential_state]);
+
   const handleSubmit = () => {
     formik.handleSubmit();
   };
@@ -169,8 +173,8 @@ const Contact = ({ onNext, onPrev, onClose } = {}) => {
               isDisabled={isLoadingStates}
               placeholder="Residential State"
               options={states}
+              value={states.find((val)=>val.label===formik.values.residential_state)}
               onChange={({ value }) => {
-                setState(value);
                 const find = states.find((item) => item.value === value).label;
                 formik.setFieldValue("residential_state", find);
               }}
@@ -187,10 +191,11 @@ const Contact = ({ onNext, onPrev, onClose } = {}) => {
               Residential Local Government
             </label>
             <Select
-              isDisabled={!state || isLoadingLGA}
+              isDisabled={!formik.values.residential_state || isLoadingLGA}
               isLoading={isLoadingLGA}
               placeholder="Residential Local Government"
               options={lgas}
+              value={lgas.find((val)=>val.label===formik.values.residential_lga)}
               onChange={({ value }) => {
                 const find = lgas.find((item) => item.value === value).label;
                 formik.setFieldValue("residential_lga", find);
@@ -219,15 +224,34 @@ const Contact = ({ onNext, onPrev, onClose } = {}) => {
             />
             <ErrorMessage name="residential_address" />
           </div>
-          <div className="mt-6">
+          <div className="mt-6 flex justify-between">
             <Button
               size="middle"
-              onClick={handleSubmit}
+              onClick={() => {
+                updateData({ step: "nationality" });
+              }}
               type="submit"
-              className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+              className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-5 px-4 rounded"
             >
-              Next
+              Back
             </Button>
+            <div className="space-x-5">
+              <Button
+                size="middle"
+                type="submit"
+                className="bg-blue-500  hover:bg-blue-700 text-white font-bold py-5 px-4 rounded"
+              >
+                Save Draft
+              </Button>
+              <Button
+                size="middle"
+                onClick={handleSubmit}
+                type="submit"
+                className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-5 px-4 rounded"
+              >
+                Next
+              </Button>
+            </div>
           </div>
         </div>
       </section>
