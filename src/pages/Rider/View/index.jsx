@@ -1,14 +1,19 @@
-import React from "react";
-import { useGetRider } from "@/services/API";
+import React, { useEffect } from "react";
 import { useParams } from "react-router-dom";
+import { PiSpinner } from "react-icons/pi";
 
 const index = () => {
   const { rider } = useParams();
-  const { data: riderData } = useGetRider({ rider_id: rider });
-  console.log(riderData);
+  useEffect(()=>{
+    location.replace(`https://ogun-rider.vercel.app/rider/${rider}`);
+  },[rider])
+  // const { data: riderData } = useGetRider({ rider_id: rider });
+  // console.log(riderData);
   return (
     <div>
-      <h1>User Rider</h1>
+      <div className="">
+        <PiSpinner size={20} className=" animate-spin"/>
+      </div>
     </div>
   );
 };
