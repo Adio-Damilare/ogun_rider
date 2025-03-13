@@ -5,7 +5,7 @@ import { PiSpinner } from "react-icons/pi";
 const index = () => {
   const { rider } = useParams();
   useEffect(()=>{
-    location.replace(`https://ogun-rider.vercel.app/rider/${rider}`);
+    location.replace(`https://ogun-ride.netlify.app/rider/${rider}`);
   },[rider])
   // const { data: riderData } = useGetRider({ rider_id: rider });
   // console.log(riderData);
