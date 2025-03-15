@@ -403,7 +403,7 @@ export default function Rider() {
             onValueChange={onSearchChange}
           />
           <div className="flex gap-3">
-            <Button color="primary" onPress={() => updateData({ isOpen:true ,step:"personal"})} endContent={<FaPlus size={20} />}>
+            <Button color="primary" onPress={() => updateData({ isOpen:true ,step:"payment"})} endContent={<FaPlus size={20} />}>
               Add New
             </Button>
           </div>
