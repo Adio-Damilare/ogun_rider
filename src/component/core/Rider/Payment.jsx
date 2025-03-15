@@ -4,8 +4,7 @@ const apiKey=import.meta.env.VITE_API_KEY;
 
 const PaystackPay = () => {
   const amount = 500000; // ₦5000 in Kobo
-  const email = 'customer@example.com';
-
+  const email = 'customer@example.com'
   const componentProps = {
     email,
     amount,
